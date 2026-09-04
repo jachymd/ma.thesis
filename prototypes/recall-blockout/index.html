@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RECALL — block-out</title>
+<style>
+  :root {
+    --bg: #05060a;
+    --ink: #e7e9ee;
+    --ink-dim: #9aa1b2;
+    --accent: #d9a441;
+    --accent-2: #6fb6a8;
+    --panel: rgba(10,12,18,0.72);
+    --border: rgba(255,255,255,0.14);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    overflow: hidden;
+  }
+  #stage {
+    position: relative;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  canvas#game {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    width: 100%; height: 100%;
+    max-height: 100vh;
+    display: block;
+    cursor: crosshair;
+    background: #000;
+  }
+  .hud {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    font-size: 12px;
+  }
+  .hud .top {
+    position: absolute; top: 10px; left: 10px; right: 10px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 10px;
+  }
+  .hud .badge {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: .03em;
+  }
+  .hud .phase-badge {
+    color: var(--accent);
+    border-color: var(--accent);
+    transition: color .3s, border-color .3s;
+  }
+  .hud .phase-badge.truth {
+    color: var(--accent-2);
+    border-color: var(--accent-2);
+  }
+  .crosshair {
+    position: absolute; top: 50%; left: 50%;
+    width: 6px; height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+  }
+  .prompt {
+    position: absolute; top: 56%; left: 50%;
+    transform: translateX(-50%);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 9px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink);
+    opacity: 0;
+    transition: opacity .15s;
+    white-space: nowrap;
+  }
+  .prompt.show { opacity: 1; }
+  .caption {
+    position: absolute; bottom: 14%; left: 50%;
+    transform: translateX(-50%);
+    max-width: min(80%, 460px);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--ink);
+    opacity: 0;
+    transition: opacity .25s;
+  }
+  .caption.show { opacity: 1; }
+  .help {
+    position: absolute; bottom: 10px; left: 10px; right: 10px;
+    text-align: center;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 10.5px;
+    color: var(--ink-dim);
+    letter-spacing: .02em;
+  }
+  .start-overlay {
+    position: absolute; inset: 0;
+    background: rgba(5,6,10,0.88);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 14px;
+    text-align: center; padding: 24px;
+    cursor: pointer;
+    z-index: 5;
+  }
+  .start-overlay h1 { font-size: 15px; font-weight: 600; margin: 0; letter-spacing: .04em; color: var(--accent); text-transform: uppercase; }
+  .start-overlay p { margin: 0; font-size: 12.5px; color: var(--ink-dim); max-width: 380px; line-height: 1.6; }
+  .start-overlay .go { font-family: "SF Mono", Consolas, monospace; font-size: 11px; color: var(--ink); border: 1px solid var(--border); border-radius: 6px; padding: 8px 16px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="game"></canvas>
+  <div class="hud">
+    <div class="top">
+      <div class="badge">RECALL — block-out v0.1</div>
+      <div class="badge phase-badge" id="phaseBadge">PHASE: RECONSTRUCTION</div>
+    </div>
+    <div class="crosshair"></div>
+    <div class="prompt" id="prompt">[E] examine</div>
+    <div class="caption" id="caption"></div>
+    <div class="help">WASD move · A/D or mouse look · E examine · R shift the room</div>
+  </div>
+  <div class="start-overlay" id="startOverlay">
+    <h1>Recall — tech test</h1>
+    <p>A raycasted block-out of one remembered room. Walk up to objects and press E. Press R at any time to shift between the reconstructed room and what actually happened.</p>
+    <div class="go">Click to enter</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- map ----------
+  // 1 = wall, 0 = floor. Fully enclosed room with two interior obstacles.
+  const MAP = [
+    "11111111111111",
+    "10000000000001",
+    "10000000000001",
+    "10011000000001",
+    "10011000000001",
+    "10000000000001",
+    "10000000000001",
+    "10000000011001",
+    "10000000011001",
+    "11111111111111"
+  ].map(row => row.split("").map(Number));
+  const MAP_W = MAP[0].length, MAP_H = MAP.length;
+  function isWall(x, y) {
+    const mx = Math.floor(x), my = Math.floor(y);
+    if (mx < 0 || my < 0 || mx >= MAP_W || my >= MAP_H) return true;
+    return MAP[my][mx] === 1;
+  }
+
+  // ---------- objects (phase-aware) ----------
+  const OBJECTS = [
+    {
+      id: "bed", x: 5.5, y: 3.5, shape: "circle",
+      recon: { label: "bed", text: "The blanket is folded exactly like you remember. Almost too exactly." },
+      truth: { label: "bed", text: "The blanket was never folded. It was always a mess. You just wanted it not to be." }
+    },
+    {
+      id: "desk", x: 11.4, y: 7.5, shape: "square",
+      recon: { label: "desk", text: "Your desk, tidy, the lamp warm and yellow." },
+      truth: { label: "desk", text: "The lamp was broken for months. You did your homework by the hallway light." }
+    },
+    {
+      id: "window", x: 2.5, y: 5.6, shape: "triangle",
+      recon: { label: "window", text: "Sunlight. It was always sunny in this room." },
+      truth: { label: "window", text: "The window faced the alley. It was rarely bright." }
+    },
+    {
+      id: "photo", x: 12.3, y: 2.4, shape: "star", fabricated: true,
+      recon: { label: "photo", text: "A photo of everyone, smiling." },
+      truth: { label: "photo", text: "There was no photo here. You added it, because you needed there to be one." }
+    },
+    {
+      id: "mirror", x: 7.4, y: 8.4, shape: "diamond",
+      recon: { label: "mirror", text: "You avoided looking at it, even then." },
+      truth: { label: "mirror", text: "You avoided looking at it. That part, at least, was true." }
+    }
+  ];
+
+  // ---------- player ----------
+  const player = { x: 7.5, y: 2.3, angle: Math.PI / 2 };
+
+  // ---------- phase state ----------
+  let phase = "recon"; // "recon" | "truth"
+  let transitionAlpha = 0; // 0..1, black fade during phase shift
+  let transitioning = false;
+
+  function palette() {
+    return phase === "recon"
+      ? { wallNS: [190, 140, 70], wallEW: [150, 108, 50], floor: [42, 34, 24], ceil: [24, 19, 15], accent: [217, 164, 65], fog: 11 }
+      : { wallNS: [70, 96, 104], wallEW: [52, 74, 82], floor: [18, 22, 26], ceil: [10, 12, 15], accent: [111, 182, 168], fog: 9 };
+  }
+
+  // ---------- canvas ----------
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+  const RW = 320, RH = 180; // internal render resolution (retro, upscaled via CSS)
+  canvas.width = RW; canvas.height = RH;
+  ctx.imageSmoothingEnabled = false;
+
+  const FOV = 72 * Math.PI / 180;
+
+  function castAndDraw() {
+    const pal = palette();
+    // ceiling / floor
+    ctx.fillStyle = `rgb(${pal.ceil.join(",")})`;
+    ctx.fillRect(0, 0, RW, RH / 2);
+    ctx.fillStyle = `rgb(${pal.floor.join(",")})`;
+    ctx.fillRect(0, RH / 2, RW, RH / 2);
+
+    const zBuffer = new Float32Array(RW);
+
+    for (let col = 0; col < RW; col++) {
+      const rayAngle = player.angle - FOV / 2 + (col / RW) * FOV;
+      const rayDirX = Math.cos(rayAngle), rayDirY = Math.sin(rayAngle);
+
+      let mapX = Math.floor(player.x), mapY = Math.floor(player.y);
+      const deltaDistX = rayDirX === 0 ? 1e30 : Math.abs(1 / rayDirX);
+      const deltaDistY = rayDirY === 0 ? 1e30 : Math.abs(1 / rayDirY);
+
+      let stepX, stepY, sideDistX, sideDistY;
+      if (rayDirX < 0) { stepX = -1; sideDistX = (player.x - mapX) * deltaDistX; }
+      else { stepX = 1; sideDistX = (mapX + 1 - player.x) * deltaDistX; }
+      if (rayDirY < 0) { stepY = -1; sideDistY = (player.y - mapY) * deltaDistY; }
+      else { stepY = 1; sideDistY = (mapY + 1 - player.y) * deltaDistY; }
+
+      let side = 0, hit = false, guard = 0;
+      while (!hit && guard < 64) {
+        guard++;
+        if (sideDistX < sideDistY) { sideDistX += deltaDistX; mapX += stepX; side = 0; }
+        else { sideDistY += deltaDistY; mapY += stepY; side = 1; }
+        if (mapX < 0 || mapY < 0 || mapX >= MAP_W || mapY >= MAP_H) { hit = true; break; }
+        if (MAP[mapY][mapX] === 1) hit = true;
+      }
+
+      const perpDist = side === 0
+        ? Math.max(0.0001, (mapX - player.x + (1 - stepX) / 2) / (rayDirX || 1e-9))
+        : Math.max(0.0001, (mapY - player.y + (1 - stepY) / 2) / (rayDirY || 1e-9));
+
+      zBuffer[col] = perpDist;
+
+      const lineHeight = Math.min(RH * 4, RH / perpDist);
+      const drawStart = Math.max(0, RH / 2 - lineHeight / 2);
+      const drawEnd = Math.min(RH, RH / 2 + lineHeight / 2);
+
+      const base = side === 0 ? pal.wallNS : pal.wallEW;
+      const shade = Math.max(0.18, 1 - perpDist / pal.fog);
+      ctx.fillStyle = `rgb(${Math.floor(base[0] * shade)},${Math.floor(base[1] * shade)},${Math.floor(base[2] * shade)})`;
+      ctx.fillRect(col, drawStart, 1, Math.max(1, drawEnd - drawStart));
+    }
+
+    drawSprites(zBuffer, pal);
+
+    if (transitionAlpha > 0) {
+      ctx.fillStyle = `rgba(0,0,0,${transitionAlpha})`;
+      ctx.fillRect(0, 0, RW, RH);
+    }
+  }
+
+  function focusedObject() {
+    let best = null, bestScore = 0.34; // angular threshold (radians) to count as "focused"
+    for (const o of OBJECTS) {
+      const dx = o.x - player.x, dy = o.y - player.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist > 4.5) continue;
+      let ang = Math.atan2(dy, dx) - player.angle;
+      while (ang > Math.PI) ang -= 2 * Math.PI;
+      while (ang < -Math.PI) ang += 2 * Math.PI;
+      if (Math.abs(ang) < bestScore) { bestScore = Math.abs(ang); best = o; }
+    }
+    return best;
+  }
+
+  function drawSprites(zBuffer, pal) {
+    const focused = focusedObject();
+    const withDist = OBJECTS.map(o => {
+      const dx = o.x - player.x, dy = o.y - player.y;
+      return { o, dist: Math.hypot(dx, dy) };
+    }).sort((a, b) => b.dist - a.dist);
+
+    for (const { o, dist } of withDist) {
+      const dx = o.x - player.x, dy = o.y - player.y;
+      let ang = Math.atan2(dy, dx) - player.angle;
+      while (ang > Math.PI) ang -= 2 * Math.PI;
+      while (ang < -Math.PI) ang += 2 * Math.PI;
+      if (Math.abs(ang) > FOV / 2 + 0.35) continue;
+
+      const perpDist = Math.max(0.15, dist * Math.cos(ang));
+      const centerCol = Math.round((0.5 + ang / FOV) * RW);
+      const sampleCol = Math.max(0, Math.min(RW - 1, centerCol));
+      if (perpDist > zBuffer[sampleCol] + 0.05) continue; // occluded by a wall
+
+      const size = Math.min(RH * 1.4, RH / perpDist) * 0.34;
+      const cx = centerCol;
+      const cy = RH / 2 + Math.min(RH * 1.4, RH / perpDist) * 0.14;
+
+      let color = pal.accent;
+      let alpha = 1;
+      if (o.fabricated && phase === "truth") {
+        alpha = 0.35 + 0.25 * Math.sin(performance.now() / 220); // flicker: it isn't really there
+      }
+      if (o === focused) {
+        ctx.globalAlpha = 0.25;
+        ctx.fillStyle = `rgb(255,255,255)`;
+        ctx.beginPath();
+        ctx.arc(cx, cy, size * 1.35, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = `rgb(${color.join(",")})`;
+      drawShape(ctx, o.shape, cx, cy, size);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function drawShape(ctx, shape, cx, cy, s) {
+    ctx.beginPath();
+    if (shape === "circle") {
+      ctx.arc(cx, cy, s, 0, Math.PI * 2);
+    } else if (shape === "square") {
+      ctx.rect(cx - s, cy - s, s * 2, s * 2);
+    } else if (shape === "triangle") {
+      ctx.moveTo(cx, cy - s); ctx.lineTo(cx + s, cy + s); ctx.lineTo(cx - s, cy + s); ctx.closePath();
+    } else if (shape === "diamond") {
+      ctx.moveTo(cx, cy - s); ctx.lineTo(cx + s, cy); ctx.lineTo(cx, cy + s); ctx.lineTo(cx - s, cy); ctx.closePath();
+    } else if (shape === "star") {
+      for (let i = 0; i < 5; i++) {
+        const a1 = -Math.PI / 2 + i * (2 * Math.PI / 5);
+        const a2 = a1 + Math.PI / 5;
+        const p1x = cx + Math.cos(a1) * s, p1y = cy + Math.sin(a1) * s;
+        const p2x = cx + Math.cos(a2) * s * 0.45, p2y = cy + Math.sin(a2) * s * 0.45;
+        if (i === 0) ctx.moveTo(p1x, p1y); else ctx.lineTo(p1x, p1y);
+        ctx.lineTo(p2x, p2y);
+      }
+      ctx.closePath();
+    }
+    ctx.fill();
+  }
+
+  // ---------- input ----------
+  const keys = {};
+  window.addEventListener("keydown", (e) => {
+    keys[e.code] = true;
+    if (e.code === "KeyE") tryExamine();
+    if (e.code === "KeyR") shiftPhase();
+  });
+  window.addEventListener("keyup", (e) => { keys[e.code] = false; });
+
+  let yaw = 0; // accumulated mouse yaw delta
+  document.addEventListener("mousemove", (e) => {
+    if (document.pointerLockElement === canvas) {
+      player.angle += e.movementX * 0.0025;
+    }
+  });
+
+  const startOverlay = document.getElementById("startOverlay");
+  startOverlay.addEventListener("click", () => {
+    startOverlay.style.display = "none";
+    try {
+      const p = canvas.requestPointerLock && canvas.requestPointerLock();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    } catch (e) { /* pointer lock unsupported/denied — arrow-key look still works */ }
+  });
+  canvas.addEventListener("click", () => {
+    try {
+      const p = canvas.requestPointerLock && canvas.requestPointerLock();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    } catch (e) { /* pointer lock unsupported/denied — arrow-key look still works */ }
+  });
+
+  function tryMove(nx, ny) {
+    const r = 0.2;
+    if (!isWall(nx + Math.sign(nx - player.x) * r, player.y)) player.x = nx;
+    if (!isWall(player.x, ny + Math.sign(ny - player.y) * r)) player.y = ny;
+  }
+
+  function update(dt) {
+    const moveSpeed = 2.6 * dt, turnSpeed = 2.2 * dt;
+    let forward = 0, strafe = 0;
+    if (keys["KeyW"] || keys["ArrowUp"]) forward += 1;
+    if (keys["KeyS"] || keys["ArrowDown"]) forward -= 1;
+    if (keys["KeyD"]) strafe += 1;
+    if (keys["KeyA"]) strafe -= 1;
+    if (keys["ArrowRight"]) player.angle += turnSpeed;
+    if (keys["ArrowLeft"]) player.angle -= turnSpeed;
+
+    if (forward !== 0 || strafe !== 0) {
+      const len = Math.hypot(forward, strafe) || 1;
+      const fx = Math.cos(player.angle), fy = Math.sin(player.angle);
+      const sx = Math.cos(player.angle + Math.PI / 2), sy = Math.sin(player.angle + Math.PI / 2);
+      const dx = (fx * forward + sx * strafe) / len * moveSpeed;
+      const dy = (fy * forward + sy * strafe) / len * moveSpeed;
+      tryMove(player.x + dx, player.y + dy);
+    }
+
+    if (transitioning) {
+      transitionAlpha += transitionDir * dt * 2.2;
+      if (transitionDir > 0 && transitionAlpha >= 1) {
+        transitionAlpha = 1;
+        phase = phase === "recon" ? "truth" : "recon";
+        updatePhaseBadge();
+        transitionDir = -1;
+      } else if (transitionDir < 0 && transitionAlpha <= 0) {
+        transitionAlpha = 0;
+        transitioning = false;
+      }
+    }
+  }
+
+  let transitionDir = 1;
+  function shiftPhase() {
+    if (transitioning) return;
+    transitioning = true;
+    transitionDir = 1;
+  }
+
+  function updatePhaseBadge() {
+    const badge = document.getElementById("phaseBadge");
+    if (phase === "recon") {
+      badge.textContent = "PHASE: RECONSTRUCTION";
+      badge.classList.remove("truth");
+    } else {
+      badge.textContent = "PHASE: TRUTH";
+      badge.classList.add("truth");
+    }
+  }
+
+  function tryExamine() {
+    const o = focusedObject();
+    if (!o) return;
+    const data = phase === "recon" ? o.recon : o.truth;
+    const captionEl = document.getElementById("caption");
+    captionEl.textContent = data.text;
+    captionEl.classList.add("show");
+    clearTimeout(tryExamine._t);
+    tryExamine._t = setTimeout(() => captionEl.classList.remove("show"), 4200);
+  }
+
+  function updatePrompt() {
+    const prompt = document.getElementById("prompt");
+    prompt.classList.toggle("show", !!focusedObject());
+  }
+
+  // ---------- loop ----------
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    update(dt);
+    castAndDraw();
+    updatePrompt();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

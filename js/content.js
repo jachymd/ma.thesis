@@ -118,7 +118,7 @@ const SITE_CONTENT = {
   },
 
   prototypes: [
-    { title: "Phase One — reconstruction block-out", type: "placeholder", url: "", note: "Add the itch.io embed URL or a local build path (e.g. /prototypes/recall-phase1/index.html) once the first playable block-out exists." }
+    { title: "RECALL — raycasted block-out (walk, examine, shift phase)", type: "html", url: "prototypes/recall-blockout/index.html", note: "Zero-dependency retro raycaster tech test. WASD/mouse to move and look, E to examine objects, R to shift between the reconstructed room and the truth underneath." }
   ],
 
   // ---- SECTION 4 ------------------------------------------------------

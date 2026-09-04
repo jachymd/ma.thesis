@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MA Thesis Pitch — Cologne Game Lab</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <p class="eyebrow">Cologne Game Lab — MA Thesis Pitch</p>
+    <h1 id="site-title">Loading…</h1>
+    <p class="status-line" id="site-status">Loading…</p>
+    <nav class="section-nav">
+      <a href="#section-1">01 · Question</a>
+      <a href="#section-2">02 · Context &amp; Literature</a>
+      <a href="#section-3">03 · Practical Part</a>
+      <a href="#section-4">04 · Timeline</a>
+    </nav>
+  </div>
+  <button id="edit-toggle" class="edit-toggle" type="button" aria-pressed="false">✎ Edit mode: off</button>
+</header>
+
+<main class="wrap">
+
+  <!-- SECTION 1 -->
+  <section id="section-1" class="section">
+    <h2>01 · Thesis Question</h2>
+
+    <div class="split">
+      <div class="col">
+        <h3 class="kicker">Theoretical part</h3>
+        <p class="thesis-question" data-field="thesisQuestion" data-editable="text"></p>
+        <ul class="bullets" data-field="theoryOutline" data-editable="list-text"></ul>
+        <h4 class="ref-heading">Points of reference</h4>
+        <ul class="ref-list" data-field="theoryRefsShort" data-editable="list-ref"></ul>
+      </div>
+
+      <div class="col">
+        <h3 class="kicker">Practical part</h3>
+        <p class="one-liner" data-field="practicalOneLiner" data-editable="text"></p>
+        <ul class="bullets" data-field="practicalOutline" data-editable="list-text"></ul>
+        <h4 class="ref-heading">Points of reference</h4>
+        <ul class="ref-list" data-field="practicalRefsShort" data-editable="list-ref"></ul>
+      </div>
+    </div>
+
+    <div class="balance-bar" aria-hidden="true">
+      <div class="balance-track">
+        <div class="balance-fill" id="balance-fill"></div>
+        <div class="balance-marker" id="balance-marker"></div>
+      </div>
+      <div class="balance-labels">
+        <span>Theory <strong id="balance-theory-pct">—</strong></span>
+        <span>Practice <strong id="balance-practice-pct">—</strong></span>
+      </div>
+      <p class="balance-hint">Edit the split in <code>content.js</code> → <code>balance.theoryPercent</code> (must land between 20–80 either way).</p>
+    </div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section id="section-2" class="section">
+    <h2>02 · Context &amp; Literature</h2>
+
+    <div class="prose" data-field="whyItMatters" data-editable="richtext"></div>
+
+    <h3 class="kicker">Literature</h3>
+    <p class="hint">Expandable — add entries in <code>content.js</code> → <code>literature[]</code>. Link to the author/studio's own site when it exists and says more than Wikipedia (practice pages, project pages); fall back to Wikipedia otherwise.</p>
+    <ul class="lit-list" id="lit-list" data-field="literature" data-editable="list-lit"></ul>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section id="section-3" class="section">
+    <h2>03 · Practical Part</h2>
+
+    <div class="store-card">
+      <div class="store-card-main">
+        <h3 class="game-title" data-field="practical.title" data-editable="text"></h3>
+        <p class="game-oneliner" data-field="practical.oneLiner" data-editable="text"></p>
+        <p class="game-hook" data-field="practical.hook" data-editable="text"></p>
+        <p class="game-paragraph" data-field="practical.paragraph" data-editable="text"></p>
+        <div class="tag-row" id="tag-row" data-field="practical.tags" data-editable="list-tags"></div>
+        <p class="genre-line">Genre: <span data-field="practical.genre" data-editable="text"></span></p>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <h4>For whom</h4>
+        <p data-field="practical.forWhom" data-editable="text"></p>
+      </div>
+      <div class="card">
+        <h4>How it affects the player</h4>
+        <p data-field="practical.playerImpact" data-editable="text"></p>
+      </div>
+      <div class="card">
+        <h4>What it brings me, as researcher/designer</h4>
+        <p data-field="practical.researcherImpact" data-editable="text"></p>
+      </div>
+    </div>
+
+    <div class="gdd-block">
+      <div class="gdd-header">
+        <h3 class="kicker">Copy for AI-assisted GDD drafting</h3>
+        <button id="copy-gdd" type="button" class="btn">Copy prompt</button>
+      </div>
+      <p class="hint">Copies a compiled prompt (one-liner, hook, paragraph, genre, tags, and the three questions above) — paste it into an AI assistant to draft a brief Game Design Document.</p>
+      <pre id="gdd-preview" class="gdd-preview"></pre>
+    </div>
+
+    <div class="prototypes-block">
+      <h3 class="kicker">Playable prototypes</h3>
+      <p class="hint">Add entries in <code>content.js</code> → <code>prototypes[]</code>. Supports an itch.io embed, a local HTML build (e.g. <code>/prototypes/lens-room/index.html</code>), or a plain link.</p>
+      <div id="prototype-list" class="prototype-list" data-field="prototypes" data-editable="list-proto"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section id="section-4" class="section">
+    <h2>04 · Timeline — 4 Months</h2>
+    <p class="hint">Edit phases in <code>content.js</code> → <code>timeline[]</code>. Each phase can reference which section it develops.</p>
+    <ol class="timeline" id="timeline-list" data-field="timeline" data-editable="list-timeline"></ol>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Edit mode lets you tweak text, lists, tags, literature, prototypes and the timeline directly in the browser. Nothing is saved to GitHub until you export and commit.</p>
+    <button id="export-content" type="button" class="btn btn-primary">⭳ Export content.js</button>
+  </div>
+</footer>
+
+<script src="js/content.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

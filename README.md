@@ -43,13 +43,17 @@ In `content.js` → `prototypes[]`, each entry is:
 
 ## Deploying with GitHub Pages
 
-This repo is already connected to `https://github.com/jachymd/ma.thesis.git` on branch `main`. To publish:
+This repo is already connected to `https://github.com/jachymd/ma.thesis.git` on branch `main`, and includes `.github/workflows/pages.yml` — a GitHub Actions workflow that deploys the site automatically on every push to `main`. No build step: it just publishes the repo as-is.
 
-1. Commit and push these files to `main`.
-2. On GitHub: repo → **Settings → Pages** → under "Build and deployment", set **Source: Deploy from a branch**, **Branch: main**, folder **/ (root)** → Save.
-3. GitHub will publish at `https://jachymd.github.io/ma.thesis/` (may take a minute after the first push).
+One-time setup (only needed once, ever):
 
-No build step is needed — it's plain HTML/CSS/JS.
+1. Commit and push these files to `main` (including `.github/workflows/pages.yml` and `.nojekyll`).
+2. On GitHub: repo → **Settings → Pages** → under "Build and deployment", set **Source: GitHub Actions** → Save.
+3. Push (or re-run the workflow from the **Actions** tab). GitHub will publish at `https://jachymd.github.io/ma.thesis/` — check the **Actions** tab for deploy status; the first run usually takes a minute or two.
+
+After that one-time step, every future push to `main` — including an "Export content.js" edit you commit — redeploys automatically. No further settings changes needed.
+
+`.nojekyll` disables GitHub's default Jekyll processing, which isn't needed here and can otherwise interfere with folders whose names start with an underscore.
 
 ## Notes
 

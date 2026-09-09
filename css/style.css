@@ -129,10 +129,10 @@ body.edit-mode { --edit-outline: 1px dashed var(--accent-soft); }
 
 .section h2 {
   font-family: var(--mono);
-  font-size: 13px;
-  letter-spacing: .08em;
+  font-size: 39px;
+  letter-spacing: .04em;
   text-transform: uppercase;
-  color: var(--text-faint);
+  color: #ffffff;
   margin: 0 0 28px;
 }
 
@@ -142,7 +142,7 @@ body.edit-mode { --edit-outline: 1px dashed var(--accent-soft); }
   text-transform: uppercase;
   letter-spacing: .08em;
   color: var(--accent-2);
-  margin: 0 0 10px;
+  margin: 32px 0 12px;
 }
 
 .ref-heading {
@@ -309,33 +309,8 @@ body.edit-mode { --edit-outline: 1px dashed var(--accent-soft); }
 
 .card h4 { margin: 0 0 8px; font-size: 13.5px; color: var(--accent-2); }
 .card p { margin: 0; font-size: 14px; color: var(--text-dim); }
-
-/* GDD block */
-
-.gdd-block {
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px 24px;
-  margin-bottom: 40px;
-}
-
-.gdd-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 4px;}
-.gdd-header h3 { margin: 0; }
-
-.gdd-preview {
-  white-space: pre-wrap;
-  font-family: var(--mono);
-  font-size: 12.5px;
-  color: var(--text-faint);
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 14px 16px;
-  max-height: 220px;
-  overflow-y: auto;
-  margin: 12px 0 0;
-}
+.card-richtext p { margin: 0 0 10px; }
+.card-richtext p:last-child { margin-bottom: 0; }
 
 /* prototypes */
 

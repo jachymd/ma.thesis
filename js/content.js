@@ -119,13 +119,15 @@ const SITE_CONTENT = {
     oneLiner: "Living Atlas: an interactive library that rearranges itself.",
     hook: "Every pattern you pick reshapes the room around you — you don't read what it means, you walk through it.",
     paragraph:
-      "Living Atlas is an abstract, walkable library that doubles as its own index. At the start, two collections are laid out for browsing: a small set of architecture patterns, and a matching set of level-design patterns drawn from the Game Design Atlas. Pick one, or several, and the modular library — its shelves, windows, a courtyard garden, a lighthouse glimpsed through the stacks — reshapes itself around the combination, with each active pattern keeping one consistent colour between the collection screen and its built form. Nothing is explained in text; the space is the explanation. The test is simple: after walking through a combination cold, can a player say what pattern they just experienced, without ever being told its name first.",
+      "Living Atlas is an abstract, walkable library that doubles as its own index. At the start, two collections are laid out for browsing: a small set of architecture patterns, and a matching set of level-design patterns drawn from the Game Design Atlas. Pick one, or several, and the modular library — its shelves, windows, a courtyard garden, a lighthouse glimpsed through the stacks — reshapes itself around the combination, with each active pattern keeping one consistent colour between the collection screen and its built form. Nothing is explained in explicit text; the space is the explanation. The test is simple: after walking through a combination, can a player say what pattern they just experienced, without ever being told its name first.",
     genre: "Short first-person spatial-learning experience / interactive pattern library",
     tags: ["First-Person", "Experimental", "Educational", "Modular", "Architecture", "Level Design", "Pattern Language", "Short", "Singleplayer", "Indie"],
-    forWhom:
-      "Primary: the thesis committee/examiners, as a legible, playable demonstration of the pattern bridge between architecture and level design. Secondary: aspiring game designers, level design students, and enthusiasts — the modularity is deliberately built so the library itself could be reused or extended as a teaching tool beyond the thesis.",
+    forWhom: [
+      "Primary: the thesis committee/examiners, as a legible, playable demonstration of the pattern bridge between architecture and level design.",
+      "Secondary: aspiring game designers, level design students, and enthusiasts — the modularity is deliberately built so the library itself could be reused or extended as a teaching tool beyond the thesis."
+    ],
     playerImpact:
-      "The player learns by recognition rather than exposition: a pattern is understood because it was walked through and seen change the space, not because it was defined first. The colour-coding gives them a way to check their own read against the intended pattern without being told outright whether they were right — the same ambiguity-preserving instinct as the RECALL thread's design ethos, applied here to a pedagogical rather than emotional register.",
+      "The player learns by recognition rather than exposition: a pattern is understood because it was walked through and seen change the space, not because it was defined first. The colour-coding gives them a way to check their own read against the intended pattern without being told outright whether they were right.",
     researcherImpact:
       "This is research-through-design: building Living Atlas tests, practically, whether a curated architecture / level-design pattern pairing can be made legible through spatial and colour coding alone. It also produces a reusable object — a small pattern library with real design decisions behind each entry — with more potential beyond the thesis's scope than a written argument alone would have."
   },
@@ -139,9 +141,9 @@ const SITE_CONTENT = {
       phase: "Phase 1 — Foundation",
       dateRange: "Weeks 1–4",
       goals: [
-        "Lock the pattern-legibility framing and finalize the thesis question wording",
+        "Lock the framing and finalize the thesis question wording",
         "Select and finalize the 5–6 architecture patterns (one clear source each) and their matching Game Design Atlas categories",
-        "Draft the methodology chapter early — it concerns method, not findings, so it can be written before results exist",
+        "Draft the Introduction chapter and the Application chapter's research-through-design methodology early — these concern framing and method, not findings, so they can be written before results exist",
         "Tech-test the core mechanic: can a module visibly reshape based on an active pattern selection at all"
       ],
       relatedSections: ["Section 1", "Section 2"]
@@ -152,7 +154,7 @@ const SITE_CONTENT = {
       goals: [
         "Design the module set for the chosen pattern pairs — colour coding, symbolic module choices (lighthouse, courtyard, etc.)",
         "Build a first playable combining at least two patterns",
-        "Dedicated writing sprint: convert pattern-selection notes into the case-study / pattern-pairing chapter"
+        "Dedicated writing sprint: draft the Architecture Patterns and Level Design Patterns chapters from the pattern-selection notes"
       ],
       relatedSections: ["Section 3"]
     },
@@ -161,8 +163,8 @@ const SITE_CONTENT = {
       dateRange: "Weeks 9–12",
       goals: [
         "Full art / lighting pass on the finished pattern set — small and curated, not the full combinatorial space",
-        "Documented design walkthroughs: play through each finished combination myself and log where the intended pattern reads clearly and where it doesn't — this replaces formal playtesting as evidence for the closing chapter",
-        "Draft theory chapters in parallel, cross-referencing what the build is teaching about the pairing"
+        "Documented design walkthroughs: play through each finished combination myself and log where the intended pattern reads clearly and where it doesn't — this replaces formal playtesting as evidence for The Bridge chapter",
+        "Draft The Bridge chapter in parallel, cross-referencing what the build is teaching about the pairing"
       ],
       relatedSections: ["Section 2", "Section 3"]
     },
@@ -170,7 +172,7 @@ const SITE_CONTENT = {
       phase: "Phase 4 — Polish, write-up & defense prep",
       dateRange: "Weeks 13–16",
       goals: [
-        "Collect and analyze the design-walkthrough notes against the theory chapters",
+        "Collect and analyze the design-walkthrough notes against The Bridge and Application chapters",
         "Final two weeks reserved purely for writing / editing — kept separate from level polish so the two don't compete for time",
         "Final polish pass on the build; prepare defense presentation and this pitch site as supporting material"
       ],

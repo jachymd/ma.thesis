@@ -177,7 +177,7 @@
       let input = bal.querySelector("#balance-input");
       if (!input) {
         input = ce("input", { type: "text", id: "balance-input", style: "width:60px;margin-left:8px;" });
-        bal.querySelector(".balance-hint").after(input);
+        bal.appendChild(input);
       }
       input.value = state.balance.theoryPercent;
       input.oninput = () => {
@@ -293,7 +293,10 @@
       tagRow.appendChild(addBtn("add tag", () => { state.practical.tags.push("new-tag"); mountSection3(); }));
     }
 
-    ["forWhom", "playerImpact", "researcherImpact"].forEach((key) => {
+    const forWhomEl = s.querySelector('[data-field="practical.forWhom"]');
+    replaceWith(forWhomEl, richTextField("practical.forWhom", "card-richtext"));
+
+    ["playerImpact", "researcherImpact"].forEach((key) => {
       const el = s.querySelector('[data-field="practical.' + key + '"]');
       const val = getPath(state, "practical." + key);
       const p = ce("p", { text: val });
@@ -305,8 +308,6 @@
       }
       el.replaceWith(p);
     });
-
-    renderGDDPreview();
 
     // prototypes
     const protoList = document.getElementById("prototype-list");
@@ -364,28 +365,6 @@
         mountSection3();
       }));
     }
-  }
-
-  function renderGDDPreview() {
-    const p = state.practical;
-    const text =
-`GAME: ${p.title}
-ONE-LINER: ${p.oneLiner}
-HOOK: ${p.hook}
-GENRE: ${p.genre}
-TAGS: ${p.tags.join(", ")}
-
-DESCRIPTION:
-${p.paragraph}
-
-FOR WHOM: ${p.forWhom}
-PLAYER IMPACT: ${p.playerImpact}
-RESEARCHER/DESIGNER VALUE: ${p.researcherImpact}
-
----
-Using the above, draft a brief Game Design Document (core loop, key mechanics, level/space breakdown, art & audio direction, scope notes for a solo 4-month student production).`;
-    document.getElementById("gdd-preview").textContent = text;
-    return text;
   }
 
   // ---------- section 4 : timeline ----------
@@ -463,21 +442,6 @@ Using the above, draft a brief Game Design Document (core loop, key mechanics, l
     btn.setAttribute("aria-pressed", String(editMode));
     btn.textContent = editMode ? "✎ Edit mode: on" : "✎ Edit mode: off";
     renderAll();
-  });
-
-  // ---------- copy GDD prompt ----------
-
-  document.getElementById("copy-gdd").addEventListener("click", async () => {
-    const text = renderGDDPreview();
-    try {
-      await navigator.clipboard.writeText(text);
-      const btn = document.getElementById("copy-gdd");
-      const original = btn.textContent;
-      btn.textContent = "Copied ✓";
-      setTimeout(() => { btn.textContent = original; }, 1500);
-    } catch (e) {
-      // clipboard API unavailable (e.g. plain file:// in some browsers) — text is visible in the preview box for manual copy
-    }
   });
 
   // ---------- export content.js ----------

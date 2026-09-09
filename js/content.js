@@ -21,23 +21,24 @@
 const SITE_CONTENT = {
 
   meta: {
-    siteTitle: "Beyond Construction: Teaching Spatial Patterns Through Play",
-    status: "WORKING DRAFT — reframed around pattern legibility, not ‘can architecture connect to level design’ (already true, not a real question). Bridge: a small, honestly-scoped set of architecture patterns paired one-to-one with the Game Design Atlas's level-design patterns, made walkable and combinable in a single spatial notation. Practical concept: Living Atlas — a shapeshifting library where patterns are chosen, combined, and colour-coded into the space itself, testing whether a pattern can be recognized through play rather than exposition. Prototype not started yet — Section 3 build entries intentionally left empty for now."
+    siteTitle: "Living Atlas: Learning Spatial Patterns Through Play",
+    status: "WORKING DRAFT — reframed from the “Beyond Construction: Architecture in the Digital Age” essay (WT 2024/25), moving forward from ‘can architecture connect to level design’ (already true, not a real question). Bridge: a small, honestly-scoped set of architecture patterns paired one-to-one with selected level-design patterns, made walkable and combinable in a single spatial setting. Practical concept: Living Atlas — a shapeshifting library where patterns are chosen, combined, and colour-coded into the space itself, testing whether a pattern can be recognized through play rather than exposition. Prototype not started yet — Section 3 build entries empty for now."
   },
 
   // ---- SECTION 1 ------------------------------------------------------
 
   thesisQuestion:
-    "Can architectural and level-design patterns be built into a single, combinable, visually legible spatial notation — a walkable pattern library — that lets someone recognize a design pattern by experiencing it, rather than by being told about it?",
+    "How can architecture and level-design patterns be combined into a walkable atlas that lets a player recognize each one by experiencing it — not by being told?",
 
   theoryOutline: [
-    "A small, honestly-scoped set of architecture patterns (roughly five or six), each anchored to one clear source rather than a survey — not a claim to know architecture comprehensively.",
-    "Each architecture pattern paired one-to-one with an existing category in the Game Design Atlas's level-design library, rather than inventing a parallel taxonomy from scratch.",
-    "Research-through-design as the methodological frame (Frayling 1993; Zimmerman, Forlizzi & Evenson 2007): the built library and its documentation are the finding, not an illustration of one reached elsewhere.",
-    "A short reflection thread — not the thesis's central claim — on what's exaggerated or lost when a pattern becomes a walkable symbol (a lighthouse standing in for wayfinding, a courtyard for enclosure)."
+    "A small, honestly-scoped set of architecture patterns (roughly five or six), each anchored to one clear source.",
+    "Each architecture pattern paired one-to-one with an existing category in the Game Design Atlas's level-design library — a pattern library I co-created with two collaborators, where my own focus is level design.",
+    "Research-through-design as the method (Frayling 1993; Zimmerman, Forlizzi & Evenson 2007): the built library and its documentation are the finding, not an illustration of one reached elsewhere.",
+    "A short reflection on what's exaggerated or lost when a pattern becomes a walkable symbol (a lighthouse standing in for wayfinding, a courtyard for enclosure)."
   ],
 
   theoryRefsShort: [
+    { label: "Game Design Atlas — collective pattern library (co-created; my focus: level design)", link: "https://yschmenz.github.io/game-design-atlas/atlas/level-design/index.html" },
     { label: "Youkhana & Pearson — Videogame Atlas: Mapping Interactive Worlds", link: "https://www.koozarch.com/essays/videogame-atlas-mapping-interactive-worlds" },
     { label: "Christopher Alexander — A Pattern Language", link: "https://en.wikipedia.org/wiki/A_Pattern_Language" },
     { label: "Christopher W. Totten — An Architectural Approach to Level Design", link: "https://www.routledge.com/Architectural-Approach-to-Level-Design-Second-edition/Totten/p/book/9780815361367" },
@@ -45,16 +46,17 @@ const SITE_CONTENT = {
   ],
 
   practicalOneLiner:
-    "A library that rearranges itself around whatever design pattern you're holding — so you learn to see it by walking through it, not by being told its name.",
+    "Living Atlas: an interactive library that rearranges itself.",
 
   practicalOutline: [
-    "Living Atlas: an abstract, walkable library. Two starting 'collections' greet the player — architecture core patterns and level-design core patterns (drawn from the Game Design Atlas) — and can be picked and combined freely.",
+    "Two starting 'collections' greet the player — architecture core patterns and level-design core patterns (drawn from the Game Design Atlas) — and can be picked and combined freely.",
     "The library's modular architecture (bookshelves, windows, a courtyard garden, a lighthouse glimpsed through the stacks, a dungeon wing, etc.) reshapes according to the active combination of patterns.",
     "Every active pattern keeps one consistent colour between the collection screen and its manifestation in the space, so the player can track what a pattern looks like once it's built, not just what it's named.",
     "Scoped for solo, 4-month production: a small, curated set of pattern pairs (not the full combinatorial space), built to a finished-feeling polish rather than spread thin across many."
   ],
 
   practicalRefsShort: [
+    { label: "Game Design Atlas — collective pattern library (co-created; my focus: level design)", link: "https://yschmenz.github.io/game-design-atlas/atlas/level-design/index.html" },
     { label: "Christopher Alexander — the pattern-language format itself", link: "https://en.wikipedia.org/wiki/A_Pattern_Language" },
     { label: "Raph Koster — A Theory of Fun for Game Design (pattern recognition as the core of play)", link: "https://en.wikipedia.org/wiki/A_Theory_of_Fun_for_Game_Design" },
     { label: "Firewatch", link: "https://en.wikipedia.org/wiki/Firewatch_(video_game)" },
@@ -70,9 +72,9 @@ const SITE_CONTENT = {
   // ---- SECTION 2 ------------------------------------------------------
 
   whyItMatters: [
-    "Personally: this keeps the parts of the last year's exploration that were working — a real personal connection to architecture (Drápal, Rajniš), a growing fascination with level design and environmental storytelling — while dropping the parts that were turning into heavy theoretical writing without a clear payoff. The thesis becomes the structured wrapper for skills already being learned on the side (level design, level art), rather than a separate track competing with them for time.",
-    "For architecture and game-design discourse: there's a small, real precedent for treating game worlds as legitimate architectural sites (Youkhana & Pearson's Videogame Atlas), but almost nothing yet that tries to build a combinable, legible notation out of that bridge rather than just an analytical essay about it. That's the actual gap this thesis works in — not whether the two fields connect, but whether their shared patterns can be made visible and swappable inside a single designed space.",
-    "For game design pedagogy: existing level-design teaching material mostly explains patterns in prose (Totten, Kremers) or catalogues them abstractly (pattern libraries, wikis). A version that teaches by letting someone recognize a pattern through play — rather than reading its definition first — tests a real claim about how design vocabulary is best transferred, with light playtesting as the evidence: show the room, don't name the pattern, ask what the player noticed."
+    "Design education is still mostly text or lecture, even though video tutorials and video essays already prove a more experiential 'textbook' is possible. Interactive, spatial learning — recognizing a principle by walking through it — remains untried for architecture and level design specifically.",
+    "There's a precedent for treating architecture and virtual-space design as one field: I raised this question in an earlier essay (Beyond Construction, WT 2024/25), and Youkhana & Pearson's Videogame Atlas makes the same case from architecture's side. Both disciplines' theory seems to be asking for the same merger.",
+    "Personally, this sits where a long-standing interest in environmental storytelling, architecture theory, and psychology meets a newer excitement about what interactive media can do for teaching that text and video can't."
   ],
 
   literature: [
@@ -100,11 +102,21 @@ const SITE_CONTENT = {
     { author: "Katie Salen & Eric Zimmerman", work: "Rules of Play: Game Design Fundamentals", year: "2003", type: "Game design — meaningful play", link: "https://en.wikipedia.org/wiki/Rules_of_Play" }
   ],
 
+  // Working chapter outline for the written thesis — short, one line per chapter.
+  structureDraft: [
+    "Introduction — argues architecture and virtual space are one design question, not two; builds directly on last year's essay.",
+    "Architecture Patterns — the chosen patterns, their sources, and the reasoning behind each, illustrated with visual schematics.",
+    "Level Design Patterns — from virtual space in general down to the chosen patterns, surveyed through existing game design methods and listed in the same format as the Game Design Atlas, with examples from games I've played.",
+    "The Bridge — where the two pattern sets align and diverge: why some patterns stay tied to the physical world and others transfer freely, and whether experiencing that first-hand teaches a design principle better than reading it.",
+    "Application — research-through-design in practice: building Living Atlas from the collected patterns, with sources on interactive and experiential teaching methods.",
+    "Appendix — a devlog documenting how the patterns were applied while building Living Atlas."
+  ],
+
   // ---- SECTION 3 ------------------------------------------------------
 
   practical: {
     title: "Living Atlas (working title)",
-    oneLiner: "A library that rearranges itself around whatever design pattern you're holding — so you learn to see it by walking through it, not by being told its name.",
+    oneLiner: "Living Atlas: an interactive library that rearranges itself.",
     hook: "Every pattern you pick reshapes the room around you — you don't read what it means, you walk through it.",
     paragraph:
       "Living Atlas is an abstract, walkable library that doubles as its own index. At the start, two collections are laid out for browsing: a small set of architecture patterns, and a matching set of level-design patterns drawn from the Game Design Atlas. Pick one, or several, and the modular library — its shelves, windows, a courtyard garden, a lighthouse glimpsed through the stacks — reshapes itself around the combination, with each active pattern keeping one consistent colour between the collection screen and its built form. Nothing is explained in text; the space is the explanation. The test is simple: after walking through a combination cold, can a player say what pattern they just experienced, without ever being told its name first.",
@@ -145,11 +157,11 @@ const SITE_CONTENT = {
       relatedSections: ["Section 3"]
     },
     {
-      phase: "Phase 3 — Production & playtesting",
+      phase: "Phase 3 — Production & documentation",
       dateRange: "Weeks 9–12",
       goals: [
         "Full art / lighting pass on the finished pattern set — small and curated, not the full combinatorial space",
-        "Light playtesting: show a combination cold, ask players to describe what they noticed, compare to the intended pattern",
+        "Documented design walkthroughs: play through each finished combination myself and log where the intended pattern reads clearly and where it doesn't — this replaces formal playtesting as evidence for the closing chapter",
         "Draft theory chapters in parallel, cross-referencing what the build is teaching about the pairing"
       ],
       relatedSections: ["Section 2", "Section 3"]
@@ -158,7 +170,7 @@ const SITE_CONTENT = {
       phase: "Phase 4 — Polish, write-up & defense prep",
       dateRange: "Weeks 13–16",
       goals: [
-        "Collect and analyze playtest reflections against the theory chapters",
+        "Collect and analyze the design-walkthrough notes against the theory chapters",
         "Final two weeks reserved purely for writing / editing — kept separate from level polish so the two don't compete for time",
         "Final polish pass on the build; prepare defense presentation and this pitch site as supporting material"
       ],

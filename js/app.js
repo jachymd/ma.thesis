@@ -246,9 +246,6 @@
         mountSection2();
       }));
     }
-
-    const structureList = document.getElementById("structure-list");
-    renderBulletList(structureList, "structureDraft", mountSection2);
   }
 
   // ---------- section 3 : practical ----------
